@@ -76,10 +76,8 @@ CKEDITOR.dialog.add( 'simplebuttonDialog', function( editor ) {
 							else if (color == 'Purple')
 								background = '#8F44AD';
 
-							var style_anchor = 'text-decoration: none !important; cursor: pointer;';
-							var style_button = 'background-color: '+background+';border: 1px solid '+background+';color:#fff !important;padding: 5px 10px;border-radius:5px;font-size:14px';
+							var style_button = 'background-color:'+background+';border:1px solid '+background+';color:#fff !important;padding:5px 10px;border-radius:5px;font-size:14px;cursor:pointer;';
 
-							element.setAttribute( "style", style_anchor );
 							element.setAttribute( "data-color", color );
 							element.findOne('input').setAttribute( "style", style_button );
 						}
@@ -101,6 +99,8 @@ CKEDITOR.dialog.add( 'simplebuttonDialog', function( editor ) {
 			if ( !element || (!element.hasClass('simple-button-plugin') && !element.getParent().hasClass('simple-button-plugin') ) ) {
 				element = editor.document.createElement( 'a' );
 				element.setAttribute('class', 'simple-button-plugin');
+				element.setAttribute('target', '_blank');
+				element.setAttribute('style', 'text-decoration: none !important; cursor: pointer;');
 				element.appendHtml('<input type="button" />');
 				this.insertMode = true;
 			}
