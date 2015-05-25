@@ -35,11 +35,10 @@ CKEDITOR.dialog.add( 'simplebuttonDialog', function( editor ) {
 						label: 'Text',
 						validate: CKEDITOR.dialog.validate.notEmpty( "Text field cannot be empty." ),
 						setup: function( element ) {
-							this.setValue( element.getAttribute( "value" ) );
+							this.setValue( element.getText() );
 						},
 						commit: function( element ) {
-							element.setAttribute( "value", this.getValue() );
-							element.findOne('input').setAttribute( "value", this.getValue() );
+							element.setText( this.getValue() );
 						}
 					},
 					{
@@ -76,10 +75,10 @@ CKEDITOR.dialog.add( 'simplebuttonDialog', function( editor ) {
 							else if (color == 'Purple')
 								background = '#8F44AD';
 
-							var style_button = 'background-color:'+background+';border:1px solid '+background+';color:#fff !important;padding:5px 10px;border-radius:5px;font-size:14px;cursor:pointer;';
+							var style_button = 'display:inline-block;background-color:'+background+';border:1px solid '+background+';color:#fff !important;padding:5px 10px;border-radius:5px;font-size:14px;text-decoration: none !important; cursor: pointer;';
 
 							element.setAttribute( "data-color", color );
-							element.findOne('input').setAttribute( "style", style_button );
+							element.setAttribute( "style", style_button );
 						}
 					}
 				]
@@ -90,18 +89,10 @@ CKEDITOR.dialog.add( 'simplebuttonDialog', function( editor ) {
 			var selection = editor.getSelection();
 			var element = selection.getStartElement();
 
-			if ( element ) {
-				if ( element.getParent().hasClass('simple-button-plugin') ) {
-					element = element.getParent();
-				}
-			}
-
-			if ( !element || (!element.hasClass('simple-button-plugin') && !element.getParent().hasClass('simple-button-plugin') ) ) {
+			if ( !element || !element.hasClass('simple-button-plugin') ) {
 				element = editor.document.createElement( 'a' );
 				element.setAttribute('class', 'simple-button-plugin');
 				element.setAttribute('target', '_blank');
-				element.setAttribute('style', 'text-decoration: none !important; cursor: pointer;');
-				element.appendHtml('<input type="button" />');
 				this.insertMode = true;
 			}
 			else

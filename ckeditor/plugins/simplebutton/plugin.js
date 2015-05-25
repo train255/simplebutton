@@ -30,7 +30,7 @@ CKEDITOR.plugins.add( 'simplebutton', {
 		});
 		editor.on( 'doubleclick', function( evt ) {
 			var element = evt.data.element;
-			if ( element.hasClass('simple-button-plugin') || element.getParent().hasClass('simple-button-plugin') ) {
+			if ( element.hasClass('simple-button-plugin') ) {
 				evt.data.dialog = 'simplebuttonDialog';
 			}
 		});
