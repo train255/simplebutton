@@ -34,11 +34,15 @@ CKEDITOR.dialog.add( 'simplebuttonDialog', function( editor ) {
 						id: 'button-text',
 						label: 'Text',
 						validate: CKEDITOR.dialog.validate.notEmpty( "Text field cannot be empty." ),
-						setup: function( element ) {
+						setup: function( element, preview ) {
+							this.preview_button = preview;
 							this.setValue( element.getText() );
 						},
 						commit: function( element ) {
 							element.setText( this.getValue() );
+						},
+						onChange: function() {
+							this.preview_button.setText( this.getValue() );
 						}
 					},
 					{
@@ -53,32 +57,73 @@ CKEDITOR.dialog.add( 'simplebuttonDialog', function( editor ) {
 						}
 					},
 					{
+						type: 'text',
+						id: 'font-size',
+						label: 'Font Size (px)',
+						validate: CKEDITOR.dialog.validate.regex( /^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/, "Font size is not valid." ),
+						setup: function( element, preview ) {
+							this.preview_button = preview;
+							this.setValue( element.getStyle('font-size').split('px')[0] );
+						},
+						commit: function( element ) {
+							element.setStyle( 'font-size', this.getValue() + 'px' );
+						},
+						onChange: function() {
+							var valid = this.getValue().match( /^(?=.+)(?:[1-9]\d*|0)?(?:\.\d+)?$/ );
+							if (valid) {
+								this.preview_button.setStyle( 'font-size', this.getValue() + 'px' );
+							}
+						}
+					},
+					{
+						type: 'text',
+						id: 'border-radius',
+						label: 'Border Radius (px)',
+						validate: CKEDITOR.dialog.validate.regex( /^\+?(0|[1-9]\d*)$/, "Border Radius is not valid." ),
+						setup: function( element, preview ) {
+							this.preview_button = preview;
+							this.setValue( element.getStyle('border-radius').split('px')[0] );
+						},
+						commit: function( element ) {
+							element.setStyle( 'border-radius', this.getValue() + 'px' );
+						},
+						onChange: function() {
+							var valid = this.getValue().match( /^\+?(0|[1-9]\d*)$/ );
+							if (valid) {
+								this.preview_button.setStyle( 'border-radius', this.getValue() + 'px' );
+							}
+						}
+					},
+					{
 						type: 'select',
 						id: 'button-color',
 						label: 'Color',
-						items: [ ['Blue'], ['Green'], ['Red'], ['Orange'], ['Teal'], ['Purple'] ],
-						'default': 'Green',
-						setup: function( element ) {
+						items: [ ['Blue', '#2A80B9'], ['Green', '#27AE61'], ['Red', '#DD5561'], ['Orange', '#F39C11'], ['Teal', '#1BBC9B'], ['Purple', '#8F44AD'] ],
+						'default': '#27AE61',
+						setup: function( element, preview ) {
+							this.preview_button = preview;
 							this.setValue( element.getAttribute( "data-color" ) );
 						},
 						commit: function ( element ) {
-							var color = this.getValue();
-							var background = '#27AE61';
-							if (color == 'Blue')
-								background = '#2A80B9';
-							else if (color == 'Red')
-								background = '#DD5561';
-							else if (color == 'Orange')
-								background = '#F39C11';
-							else if (color == 'Teal')
-								background = '#1BBC9B';
-							else if (color == 'Purple')
-								background = '#8F44AD';
-
-							var style_button = 'display:inline-block;background-color:'+background+';border:1px solid '+background+';color:#fff !important;padding:5px 10px;border-radius:5px;font-size:14px;text-decoration: none !important; cursor: pointer;';
-
-							element.setAttribute( "data-color", color );
-							element.setAttribute( "style", style_button );
+							var background = this.getValue();
+							element.setAttribute( "data-color", background );
+							element.setStyle( "background-color", background );
+							element.setStyle( "border", '1px solid ' + background );
+						},
+						onChange: function() {
+							var background = this.getValue();
+							this.preview_button.setStyle( "background-color", background );
+							this.preview_button.setStyle( "border", '1px solid ' + background );
+						}
+					},
+					{
+						type : 'html',
+						html : '<p>Preview</p><div id="previewDiv" style="border: 1px solid #bbb;padding: 10px;text-align: center;"><a id="preview-button"></a></div>',
+						setup: function( element ) {
+							var document = this.getElement().getDocument();
+							var preview_button = document.getById( 'preview-button' );
+							preview_button.setAttribute( "style", element.getAttribute( "style" ) );
+							preview_button.setText( element.getText() );
 						}
 					}
 				]
@@ -93,14 +138,21 @@ CKEDITOR.dialog.add( 'simplebuttonDialog', function( editor ) {
 				element = editor.document.createElement( 'a' );
 				element.setAttribute('class', 'simple-button-plugin');
 				element.setAttribute('target', '_blank');
+				var style_button = 'display:inline-block;background-color:#27AE61;border:1px solid #27AE61;color:#fff !important;padding:5px 10px;border-radius:5px;font-size:14px;text-decoration: none !important; cursor: pointer;';
+				element.setAttribute( "style", style_button );
+				element.setText( 'Unsubscribe' );
 				this.insertMode = true;
 			}
 			else
 				this.insertMode = false;
 
 			this.element = element;
-			if ( !this.insertMode )
-				this.setupContent( this.element );
+
+
+			var document = this.getElement().getDocument();
+			var preview_button = document.getById( 'preview-button' );
+
+			this.setupContent( this.element, preview_button );
 		},
 
 		onOk: function() {
