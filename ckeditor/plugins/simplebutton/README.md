@@ -14,6 +14,9 @@ config.allowedContent = true;
 ```
 config.toolbar = [
 	...
-	{ name: 'other', items: ['SimpleButton'] }
+	{ name: 'other', items: ['simplebutton'] }
 ]
 ```
+
+# My other plugin
+[Video Snapshot](http://train255.github.io/videosnapshot/)
