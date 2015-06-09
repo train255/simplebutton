@@ -23,7 +23,7 @@
 CKEDITOR.plugins.add( 'simplebutton', {
 	init: function( editor ) {
 		editor.addCommand( 'simplebutton', new CKEDITOR.dialogCommand( 'simplebuttonDialog' ) );
-		editor.ui.addButton( 'SimpleButton', {
+		editor.ui.addButton( 'simplebutton', {
 			label: 'Simple Button',
 			command: 'simplebutton',
 			icon: this.path + 'images/simplebutton.png'
