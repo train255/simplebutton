@@ -98,29 +98,52 @@ CKEDITOR.dialog.add( 'simplebuttonDialog', function( editor ) {
 						type: 'select',
 						id: 'button-color',
 						label: 'Color',
-						items: [ ['Blue', '#2A80B9'], ['Green', '#27AE61'], ['Red', '#DD5561'], ['Orange', '#F39C11'], ['Teal', '#1BBC9B'], ['Purple', '#8F44AD'] ],
+						items: [ ['Blue', '#2A80B9'], ['Green', '#27AE61'], ['Red', '#DD5561'], ['Orange', '#F39C11'], ['Teal', '#1BBC9B'], ['Purple', '#8F44AD'], ['Custom...', 'custom'] ],
 						'default': '#27AE61',
-						setup: function( element, preview ) {
+						setup: function( element, preview, custom_color_div ) {
 							this.preview_button = preview;
+							this.custom_color_div = custom_color_div;
 							this.setValue( element.getAttribute( "data-color" ) );
 						},
 						commit: function ( element ) {
 							var background = this.getValue();
+							if (background == 'custom') {
+								 background = this.custom_color_div.find('#color-text-input').$[0].value;
+							}
 							element.setAttribute( "data-color", background );
 							element.setStyle( "background-color", background );
 							element.setStyle( "border", '1px solid ' + background );
 						},
 						onChange: function() {
 							var background = this.getValue();
+							if (background == 'custom') {
+								this.custom_color_div.setStyle( "display", "block" );
+								background = this.custom_color_div.find('#color-text-input').$[0].value;
+							} else {
+								this.custom_color_div.setStyle( "display", "none" );
+							}
 							this.preview_button.setStyle( "background-color", background );
 							this.preview_button.setStyle( "border", '1px solid ' + background );
 						}
 					},
 					{
 						type : 'html',
+						html : '<div id="customColorDiv" style="display:none"><div id="custom-color-button" style="width:23px; height:23px; background-color:#F44236; float:right; cursor: pointer;"></div><div style="float: left; width: 90%;"><input id="color-text-input" class="cke_dialog_ui_input_text" type="text" value="#F44236"></div><table id="colors-table" style="right: 40px; margin-top: -68px; position: absolute; z-index: 1; display:none"><tbody><tr style="border-bottom: 1px solid #fff;height: 23px;"><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;width: 23px; background-color: #F44236;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;width: 23px; background-color: #E91D62;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;width: 23px; background-color: #363F46;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;width: 23px; background-color: #9C26B0;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;width: 23px; background-color: #6739B6;"></td></tr><tr style="border-bottom: 1px solid #fff;height: 23px;"><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #3E50B4;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #2095F2;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #02A8F4;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #01BBD4;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #019587;"></td></tr><tr style="border-bottom: 1px solid #fff;height: 23px;"><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #4BAF4F;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #8BC24A;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #CCDB38;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #FFE93B;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #FEC107;"></td></tr><tr style="border-bottom: 1px solid #fff;height: 23px;"><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #FF9700;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #FF5521;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #795549;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #9D9D9D;"></td><td class="color-column" style="cursor:pointer;border-left: 1px solid #fff;background-color: #607C8A;"></td></tr></tbody></table></div>'
+					},
+					{
+						type : 'html',
 						html : '<p>Preview</p><div id="previewDiv" style="border: 1px solid #bbb;padding: 10px;text-align: center;"><a id="preview-button"></a></div>',
 						setup: function( element ) {
 							var document = this.getElement().getDocument();
+							var color_columns = document.find('.color-column').$;
+							for (var i = 0; i < color_columns.length; i++) {
+								var color = color_columns[i].getAttribute('style').split('background-color: ')[1].split(';')[0];
+								color_columns[i].setAttribute('onclick', 'document.getElementById("color-text-input").value = "'+color+'";var preview_button = document.getElementById("preview-button");var color = document.getElementById("color-text-input").value;preview_button.style["background-color"] = "'+color+'";preview_button.style["border"] = "1px solid '+color+'";document.getElementById("custom-color-button").style["background-color"] = "'+color+'";document.getElementById("colors-table").style.display = "none"');
+							}
+							var custom_color_button = document.getById( 'custom-color-button' );
+							custom_color_button.setAttribute( 'onclick', 'var colors_table = document.getElementById("colors-table"); if(colors_table.style.display == "none") colors_table.style.display = "block"; else colors_table.style.display = "none";' );
+							var color_text_input = document.getById( 'color-text-input' );
+							color_text_input.setAttribute( 'onchange', 'var preview_button = document.getElementById("preview-button");var color = document.getElementById("color-text-input").value;preview_button.style["background-color"] = color;preview_button.style["border"] = "1px solid " + color;' );
 							var preview_button = document.getById( 'preview-button' );
 							preview_button.setAttribute( "style", element.getAttribute( "style" ) );
 							preview_button.setText( element.getText() );
@@ -148,11 +171,10 @@ CKEDITOR.dialog.add( 'simplebuttonDialog', function( editor ) {
 
 			this.element = element;
 
-
 			var document = this.getElement().getDocument();
 			var preview_button = document.getById( 'preview-button' );
-
-			this.setupContent( this.element, preview_button );
+			var custom_color_div = document.getById( 'customColorDiv' );
+			this.setupContent( this.element, preview_button, custom_color_div );
 		},
 
 		onOk: function() {
