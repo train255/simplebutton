@@ -1,15 +1,15 @@
 /*
 
-	This file is a part of simplebuttion project.
+	This file is a part of videosnapshot project.
 
 	Copyright (C) Thanh D. Dang <thanhdd.it@gmail.com>
 
-	simplebuttion is free software: you can redistribute it and/or modify
+	videosnapshot is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
 	the Free Software Foundation, either version 3 of the License, or
 	(at your option) any later version.
 
-	simplebuttion is distributed in the hope that it will be useful, but
+	videosnapshot is distributed in the hope that it will be useful, but
 	WITHOUT ANY WARRANTY; without even the implied warranty of
 	MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 	General Public License for more details.
