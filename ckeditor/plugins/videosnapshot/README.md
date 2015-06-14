@@ -1,7 +1,7 @@
 # Add-on Installation Instructions
 Enable the plugin by using the extraPlugins configuration setting
 ```
-config.extraPlugins = 'simplebutton';
+config.extraPlugins = 'videosnapshot';
 ```
 
 If you use `sourcedialog` plugin, you need to enable `allowedContent` option
@@ -14,6 +14,6 @@ config.allowedContent = true;
 ```
 config.toolbar = [
 	...
-	{ name: 'other', items: ['SimpleButton'] }
+	{ name: 'other', items: ['videosnapshot'] }
 ]
 ```
