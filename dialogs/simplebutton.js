@@ -54,6 +54,7 @@ CKEDITOR.dialog.add( 'simplebuttonDialog', function( editor ) {
 						},
 						commit: function( element ) {
 							element.setAttribute( "href", this.getValue() );
+							element.removeAttribute('data-cke-saved-href');
 						}
 					},
 					{
