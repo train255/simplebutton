@@ -21,12 +21,12 @@
 
 
 CKEDITOR.dialog.add('simplebuttonDialog', function (editor) {
-	const componentToHex = function (c) {
+	var componentToHex = function (c) {
 		var hex = c.toString(16);
 		return hex.length == 1 ? "0" + hex : hex;
 	};
 
-	const rgbToHex = function (r, g, b) {
+	var rgbToHex = function (r, g, b) {
 		return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 	};
 	
