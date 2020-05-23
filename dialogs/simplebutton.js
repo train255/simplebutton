@@ -67,6 +67,19 @@ CKEDITOR.dialog.add('simplebuttonDialog', function (editor) {
 						}
 					},
 					{
+						type: 'select',
+						id: 'button-target',
+						label: 'Target',
+						items: [ [ '_self' ], [ '_blank' ] ],
+						'default': '_blank',
+						setup: function (element) {
+							this.setValue(element.getAttribute("target"));
+						},
+						commit: function(element) {
+							element.setAttribute("target", this.getValue());
+						}
+					},
+					{
 						type: 'text',
 						id: 'font-size',
 						label: 'Font Size (px)',
