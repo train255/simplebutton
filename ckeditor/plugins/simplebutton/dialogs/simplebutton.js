@@ -21,12 +21,12 @@
 
 
 CKEDITOR.dialog.add('simplebuttonDialog', function (editor) {
-	const componentToHex = function (c) {
+	var componentToHex = function (c) {
 		var hex = c.toString(16);
 		return hex.length == 1 ? "0" + hex : hex;
 	};
 
-	const rgbToHex = function (r, g, b) {
+	var rgbToHex = function (r, g, b) {
 		return "#" + componentToHex(r) + componentToHex(g) + componentToHex(b);
 	};
 	
@@ -64,6 +64,19 @@ CKEDITOR.dialog.add('simplebuttonDialog', function (editor) {
 						commit: function (element) {
 							element.setAttribute("href", this.getValue());
 							element.removeAttribute('data-cke-saved-href');
+						}
+					},
+					{
+						type: 'select',
+						id: 'button-target',
+						label: 'Target',
+						items: [ [ '_self' ], [ '_blank' ] ],
+						'default': '_blank',
+						setup: function (element) {
+							this.setValue(element.getAttribute("target"));
+						},
+						commit: function(element) {
+							element.setAttribute("target", this.getValue());
 						}
 					},
 					{
